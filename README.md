@@ -32,7 +32,7 @@ If you work with several organisations you have probably hit this: the built-in 
 ## Install
 
 ```sh
-git clone https://github.com/JamesStuder/teams-for-linux-multiclient
+git clone https://github.com/StuderWorks/teams-for-linux-multiclient
 cd teams-for-linux-multiclient
 ./install.sh                 # or ./install.sh --no-shortcuts
 ```

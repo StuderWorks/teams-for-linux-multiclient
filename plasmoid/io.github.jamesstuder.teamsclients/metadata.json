@@ -6,7 +6,7 @@
         "Icon": "teams-for-linux",
         "Category": "Utilities",
         "License": "MIT",
-        "Website": "https://github.com/JamesStuder/teams-for-linux-multiclient",
+        "Website": "https://github.com/StuderWorks/teams-for-linux-multiclient",
         "Version": "1.0"
     },
     "KPackageStructure": "Plasma/Applet",
