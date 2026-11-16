@@ -345,12 +345,22 @@ def sni_items():
         return out
     for it in items:
         svc, _, path = it.partition("/")
-        if "StatusNotifierItem-" not in svc:  # Electron registers under a well-known name like this
+        # Older Electron registered under a well-known name (org.kde.StatusNotifierItem-<pid>-<n>);
+        # newer Electron (teams-for-linux 2.32+) registers under its unique bus name (":1.234").
+        # So match on the item's Id instead of the bus name: read Id first, skip non-Teams items.
+        try:
+            sid = dbus(svc, "/" + path, "org.freedesktop.DBus.Properties", "Get",
+                       GLib.Variant("(ss)", ("org.kde.StatusNotifierItem", "Id")), 500)[0]
+        except GLib.Error:
+            continue
+        if not (sid.startswith("teams-") and sid.endswith("_status_icon_1")):
             continue
         # Only the few properties we use: GetAll also returns the icon pixmaps, and unpacking
         # those costs ~0.5 s of CPU per client on every poll.
-        props = {}
+        props = {"Id": sid}
         for name in SNI_PROPS:
+            if name == "Id":
+                continue
             try:
                 props[name] = dbus(svc, "/" + path, "org.freedesktop.DBus.Properties", "Get",
                                    GLib.Variant("(ss)", ("org.kde.StatusNotifierItem", name)), 500)[0]
